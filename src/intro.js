@@ -20,7 +20,7 @@ class Board extends Component
 	
 	state={
 		A:Array(9).fill(null),
-    t:0,
+    t:1,
 	};
 boxx(i)
 {
@@ -46,7 +46,22 @@ boxx(i)
   }
   else
   {A[i]="0";
-this.setState({t:0});
+  var m=0,n=0;
+  var B=[[null,null,null],[null,null,null],[null,null,null]];
+    for(m=0;m<3;m++)
+    {
+      for(n=0;n<3;n++)
+      {
+        B[m][n]=A[n+m*3];
+      }
+    }
+  var ans=NextOptimal(B,1);
+  var x=ans[1][0];
+  var y=ans[1][1];
+   A[y+x*3]="X"; 
+   
+
+this.setState({t:1});
 
   }
      this.setState({A:A});
@@ -104,4 +119,155 @@ const lines=[[0,1,2],
   return null;
 
 }
+
+function check(A)
+{
+  
+if(A[0][0]=='0'&&A[2][2]=='0'&&A[1][1]=='0')
+return 0;
+if(A[0][1]=='0'&&A[2][1]=='0'&&A[1][1]=='0')
+return 0;
+if(A[0][2]=='0'&&A[2][2]=='0'&&A[1][2]=='0')
+return 0;
+if(A[0][0]=='0'&&A[2][0]=='0'&&A[1][0]=='0')
+return 0;
+if(A[0][0]=='0'&&A[0][2]=='0'&&A[0][1]=='0')
+return 0;
+if(A[1][0]=='0'&&A[1][2]=='0'&&A[1][1]=='0')
+return 0;
+if(A[2][0]=='0'&&A[2][2]=='0'&&A[2][1]=='0')
+return 0;
+if(A[0][2]=='0'&&A[1][1]=='0'&&A[2][0]=='0')
+return 0;
+if(A[0][0]=='X'&&A[2][2]=='X'&&A[1][1]=='X')
+return 1;
+if(A[0][1]=='X'&&A[2][1]=='X'&&A[1][1]=='X')
+return 1;
+if(A[0][2]=='X'&&A[2][2]=='X'&&A[1][2]=='X')
+return 1;
+if(A[0][0]=='X'&&A[2][0]=='X'&&A[1][0]=='X')
+return 1;
+if(A[0][0]=='X'&&A[0][2]=='X'&&A[0][1]=='X')
+return 1;
+if(A[1][0]=='X'&&A[1][2]=='X'&&A[1][1]=='X')
+return 1;
+if(A[2][0]=='X'&&A[2][2]=='X'&&A[2][1]=='X')
+return 1;
+if(A[0][2]=='X'&&A[1][1]=='X'&&A[2][0]=='X')
+return 1;
+
+
+return -1;
+
+}
+
+function NextOptimal(A,x)
+{ 
+var ans=-1;
+var xx=5;
+var pp,qq;var i=-1,j=-1;
+var temp
+   var nn=check(A);
+   if(nn!=-1)
+   {
+
+       return [nn,[i,j]];
+       }
+
+
+           if(x==1)
+           {
+               var flag=0,flag1=0;
+           for(i=0;i<3;i++)
+           {
+               for(j=0;j<3;j++)
+               {
+
+                   if(A[i][j]==null)
+                   {
+                   A[i][j]='X';
+                     
+                   var tt=NextOptimal(A,0);
+                   temp=tt[0];
+                   if(temp==1)
+                   {
+                    A[i][j]=null;
+                    return [x,[i,j]];
+                   }
+                    if(temp==0)
+                      {ans=0;
+                      
+                            if(flag1==0&&xx!=-1)
+                        {
+                            pp=i;
+                            qq=j;    
+                      
+                        flag1=1;
+                        } 
+                      }
+                    if(temp==-1)
+                    {
+                        if(flag==0)
+                        {
+                            pp=i;
+                            qq=j;    
+                        xx=-1;
+                        flag=1;
+                        }
+                        }
+                    A[i][j]=null;
+                
+                     
+
+                   }
+
+               }
+           }
+           }
+           else
+           {
+
+            for(i=0;i<3;i++)
+           {
+               for(j=0;j<3;j++)
+               {
+
+                   if(A[i][j]==null)
+                   {
+                       A[i][j]='0';
+
+
+
+                  tt=NextOptimal(A,1);
+                  temp=tt[0];
+                   if(temp==0)
+                   {
+                        A[i][j]=null;
+                        
+                       return [0,[i,j]];
+                   }
+                    if(temp==1)
+                        ans=1;
+                    if(temp==-1)
+                        xx=-1;
+                       A[i][j]=null;
+
+
+                
+
+
+                   }
+
+               }
+           }
+
+
+
+
+           }
+        if(xx==-1)
+        return [-1,[pp,qq]];
+return[ans,[pp,qq]];
+}
+
 export default Board;
