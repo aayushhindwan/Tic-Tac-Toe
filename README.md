@@ -1,3 +1,3 @@
 # Tic-Tac-Toe
-##live at
+## live at
 https://aayushhindwan.github.io/Tic-Tac-Toe/
