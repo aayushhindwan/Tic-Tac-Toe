@@ -8,7 +8,7 @@ class Box extends Component
 render()
 {
 	return(
-		<div style={{ backgroundColor:'yellow',height:"30px" , width:"30px",borderStyle:"solid",borderWidth:"2px",display:'inline-block',padding:'2px',verticalAlign:"top"}} onClick={()=>this.props.click()}>{this.props.value}</div>
+		<div style={{ backgroundColor:'yellow',height:"30px" , width:"30px",borderStyle:"solid",borderWidth:"2px",display:'inline-block',padding:'20px',verticalAlign:"top"}} onClick={()=>this.props.click()}>{this.props.value}</div>
 		);
 }
 
@@ -38,14 +38,12 @@ boxx(i)
 	{
 		const A=this.state.A.slice();
 
-    if(A[i]==null&&CalculateWinner(A)==null)
+    if(A[i]==null&&CalculateWinner(A)==null&&this.state.t==1)
     {
-		if(this.state.t==0)
-      {A[i]='X';
-   this.setState({t:1});
-  }
-  else
-  {A[i]="0";
+      this.setState({t:0});
+		A[i]="0";
+    this.setState({A:A});
+  console.log("Hello");
   var m=0,n=0;
   var B=[[null,null,null],[null,null,null],[null,null,null]];
     for(m=0;m<3;m++)
@@ -58,13 +56,13 @@ boxx(i)
   var ans=NextOptimal(B,1);
   var x=ans[1][0];
   var y=ans[1][1];
-   A[y+x*3]="X"; 
    
 
-this.setState({t:1});
 
-  }
-     this.setState({A:A});
+  
+  console.log("Hello");
+setTimeout(() => {  A[y+x*3]="X";this.setState({A:A});this.setState({t:1});},1000);
+    
    }
   }
 	
@@ -73,7 +71,8 @@ this.setState({t:1});
 {
 return(
 <div>
-<label>Winner is{CalculateWinner(this.state.A)}</label>
+  <h1>TIC TAC TOE</h1>
+<label>Winner is  :{CalculateWinner(this.state.A)}</label>
 <br/>
 <br/>
 <div>
@@ -116,7 +115,13 @@ const lines=[[0,1,2],
     if(A[a]==A[b]&&A[b]==A[c]&& A[a]!=null)
       return A[a];
   }
-  return null;
+      for(var i=0;i<9;i++)
+        {
+          if(A[i]==null)
+            return null;
+        }
+
+  return "No Winner. Match Draw ";
 
 }
 
